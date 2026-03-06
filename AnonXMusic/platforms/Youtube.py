@@ -540,4 +540,4 @@ class YouTubeAPI:
                     logger.error(f"Invalid response from API: {str(e)}")
                     return None
                 finally:
-                    session
+                    session.close()
