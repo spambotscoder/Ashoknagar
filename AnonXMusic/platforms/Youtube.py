@@ -541,3 +541,26 @@ class YouTubeAPI:
                     return None
                 finally:
                     session.close()
+
+status = videoData.get('status')
+
+if status == 'success':
+    video_url = videoData['video_url']
+
+    result = await download_with_ytdlp(video_url, filepath, headers)
+    if result:
+        return result
+
+    result = await download_with_requests_fallback(video_url, filepath, headers)
+    if result:
+        return result
+
+    return None
+
+elif status == 'error':
+    logger.error(f"API Error: {videoData.get('message', 'Unknown error from API.')}")
+    return None
+
+else:
+    logger.error("Could not fetch Backend \nPlease contact API provider.")
+    return None
